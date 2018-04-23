@@ -6,17 +6,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * 
- * <p>Title: AddressUtils</p>
- * <p>Description: 根据IP地址获取详细的地域信息</p>
- * <p>Copyright: Copyright (c) 2015</p>
- * <p>Company: 湖南海数互联信息技术有限公司</p>
- * @author Jason
- * @email jason4j@qq.com
- * @date 2015年5月22日 上午10:24:48 
- * @version
- */
+
 public class AddressUtil {
 
 	private final static Logger logger = Logger.getLogger(AddressUtil.class);
