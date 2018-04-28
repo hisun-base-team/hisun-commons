@@ -15,7 +15,7 @@
     <groupId>com.hn-hisun</groupId>
     <artifactId>hisun-pom</artifactId>
     <version>1.0</version>
-    <relativePath>../hisun-base/pom.xml</relativePath>
+    <relativePath>../hisun-pom/pom.xml</relativePath>
   </parent>
 
   <repositories>
@@ -90,24 +90,24 @@
       <groupId>com.aspose</groupId>
       <artifactId>aspose-words</artifactId>
       <version>16.8.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/aspose-words-16.8.0-jdk16.jar</systemPath>
+      <!--<scope>system</scope>-->
+      <!--<systemPath>${project.basedir}/lib/aspose-words-16.8.0-jdk16.jar</systemPath>-->
       <!--<classifier>jdk16</classifier>-->
     </dependency>
     <dependency>
       <groupId>com.aspose</groupId>
       <artifactId>aspose-cells</artifactId>
       <version>9.0.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/aspose-cells-9.0.0.jar</systemPath>
+      <!--<scope>system</scope>-->
+      <!--<systemPath>${project.basedir}/lib/aspose-cells-9.0.0.jar</systemPath>-->
       <!--<classifier>jdk16</classifier>-->
     </dependency>
     <dependency>
       <groupId>com.aspose</groupId>
       <artifactId>aspose-slides</artifactId>
       <version>16.7.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/aspose.slides-16.7.0.jar</systemPath>
+      <!--<scope>system</scope>-->
+      <!--<systemPath>${project.basedir}/lib/aspose.slides-16.7.0.jar</systemPath>-->
       <!--<classifier>jdk16</classifier>-->
     </dependency>
     <!--<dependency>-->
