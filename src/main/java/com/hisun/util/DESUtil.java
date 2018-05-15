@@ -7,7 +7,6 @@
 package com.hisun.util;
 
 
-import org.apache.log4j.Logger;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -22,87 +21,92 @@ import java.security.SecureRandom;
 
 public class DESUtil {
 
-    private final static Logger logger = Logger.getLogger(DESUtil.class);
-
     private final static String DES = "DES";
-    private final static String PRIVATE_KEY = ")H!I(S@U*N#U&N$I^O%N";
-    private Cipher cipher;
-    private SecretKey secureKey;
-    private SecureRandom sr;
+    private final static String PRIVATE_KEY = ")!(@*#&$^%";
 
-    private DESUtil() throws Exception {
-        //生成一个随机数
-        sr = new SecureRandom();
-        //根据key创建DESKeySpec对象
-        DESKeySpec dks = new DESKeySpec(PRIVATE_KEY.getBytes());
-        //创建密钥工厂
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
-        secureKey = keyFactory.generateSecret(dks);
-        //解密
-        cipher = Cipher.getInstance(DES);
-    }
-
-    public static DESUtil getInstance() {
-        try {
-            return new DESUtil();
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return null;
-    }
-
-
-    public String encrypt(String data) throws Exception {
-        byte[] bt = encrypt(data.getBytes());
+    public static String encrypt(String data, String key) throws Exception {
+        byte[] bt = encrypt(data.getBytes(), key.getBytes());
         String newStr = new BASE64Encoder().encode(bt);
         return newStr;
     }
 
 
-    public void encrypt(File orgFile, File encryptFile) throws Exception {
+    public static void encrypt(File orgFile,File encryptFile) throws Exception{
         FileInputStream fis = new FileInputStream(orgFile);
         FileOutputStream fos = new FileOutputStream(encryptFile);
         Long fileLength = orgFile.length();
         byte[] buffer = new byte[fileLength.intValue()];
         fis.read(buffer);
-        fos.write(encrypt(buffer));
+        fos.write(encrypt(buffer,PRIVATE_KEY.getBytes()));
         fis.close();
         fos.flush();
         fos.close();
     }
 
-    public String decrypt(String data) throws Exception {
+    public static String decrypt(String data, String key) throws Exception {
         if (null == data) {
             return null;
         }
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] buf = decoder.decodeBuffer(data);
-        byte[] bt = decrypt(buf);
+        byte[] bt = decrypt(buf, key.getBytes());
         return new String(bt);
     }
 
-    public void decrypt(File encryptFile, File destFile) throws Exception {
+    public static void decrypt(File encryptFile,File destFile) throws Exception{
         FileInputStream fis = new FileInputStream(encryptFile);
         FileOutputStream fos = new FileOutputStream(destFile);
         Long fileLength = encryptFile.length();
         byte[] buffer = new byte[fileLength.intValue()];
         fis.read(buffer);
-        fos.write(decrypt(buffer));
+        fos.write(decrypt(buffer,PRIVATE_KEY.getBytes()));
         fis.close();
         fos.flush();
         fos.close();
     }
 
 
-    private byte[] decrypt(byte[] data) throws Exception {
+
+
+    private static byte[] decrypt(byte[] data, byte[] key) throws Exception {
+        //生成一个随机数
+        SecureRandom sr = new SecureRandom();
+        //根据key创建DESKeySpec对象
+        DESKeySpec dks = new DESKeySpec(key);
+        //创建密钥工厂
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
+        SecretKey secureKey = keyFactory.generateSecret(dks);
+        //解密
+        Cipher cipher = Cipher.getInstance(DES);
+        //初始化
+        cipher.init(Cipher.DECRYPT_MODE, secureKey, sr);
+        return cipher.doFinal(data);
+    }
+
+
+    private static byte[] encrypt(byte[] data, byte[] key) throws Exception {
+        //生成一个随机数
+        SecureRandom sr = new SecureRandom();
+        //从key创建DESKeySpec对象
+        DESKeySpec dks = new DESKeySpec(key);
+        //创建一个密钥工厂，然后转换成secretKey对象
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
+        SecretKey secureKey = keyFactory.generateSecret(dks);
+        //实际完成加密操作
+        Cipher cipher = Cipher.getInstance(DES);
+        //初始化Cipher对象
         cipher.init(Cipher.ENCRYPT_MODE, secureKey, sr);
         return cipher.doFinal(data);
     }
 
 
-    private byte[] encrypt(byte[] data) throws Exception {
-        cipher.init(Cipher.ENCRYPT_MODE, secureKey, sr);
-        return cipher.doFinal(data);
+    public static void main(String[] args)throws Exception {
+
+        File orgFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/0102.jpg");
+        File desFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/aaaa");
+        File xxxFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/xxx.jpg");
+        DESUtil.encrypt(orgFile,desFile);
+        DESUtil.decrypt(desFile,xxxFile);
     }
 
 }
