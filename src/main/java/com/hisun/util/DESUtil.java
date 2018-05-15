@@ -19,6 +19,7 @@ import javax.crypto.spec.IvParameterSpec;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.security.SecureRandom;
 
 public class DESUtil {
@@ -76,6 +77,17 @@ public class DESUtil {
         fos.close();
     }
 
+    public  void decrypt(File encryptFile,OutputStream os) throws Exception{
+        FileInputStream fis = new FileInputStream(encryptFile);
+        Long fileLength = encryptFile.length();
+        byte[] buffer = new byte[fileLength.intValue()];
+        fis.read(buffer);
+        os.write(decrypt(buffer,keybytes));
+        fis.close();
+        os.flush();
+        os.close();
+    }
+
 
 
     private  byte[] decrypt(byte[] data, byte[] key) throws Exception {
@@ -83,21 +95,6 @@ public class DESUtil {
         SecureRandom sr = new SecureRandom();
         //根据key创建DESKeySpec对象
         DESKeySpec dks = new DESKeySpec(key);
-        //创建密钥工厂
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
-        SecretKey secureKey = keyFactory.generateSecret(dks);
-        //解密
-        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        //初始化
-        cipher.init(Cipher.DECRYPT_MODE, secureKey,new IvParameterSpec(dks.getKey()),sr);
-        return cipher.doFinal(data);
-    }
-
-    public  byte[] getDecryptByte(byte[] data) throws Exception {
-        //生成一个随机数
-        SecureRandom sr = new SecureRandom();
-        //根据key创建DESKeySpec对象
-        DESKeySpec dks = new DESKeySpec(this.keybytes);
         //创建密钥工厂
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
         SecretKey secureKey = keyFactory.generateSecret(dks);
