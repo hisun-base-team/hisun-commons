@@ -7,6 +7,7 @@
 package com.hisun.util;
 
 
+import com.sun.crypto.provider.AESKeyGenerator;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -14,6 +15,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,54 +23,60 @@ import java.security.SecureRandom;
 
 public class DESUtil {
 
-    private final static String DES = "DES";
-    private final static String PRIVATE_KEY = ")!(@*#&$^%";
+    private final  String DES = "DES";
+    private final  String PRIVATE_KEY = "HisunUnion";
+    private byte[] keybytes;
 
-    public static String encrypt(String data, String key) throws Exception {
-        byte[] bt = encrypt(data.getBytes(), key.getBytes());
+    public DESUtil(String key){
+        keybytes = (key+PRIVATE_KEY).getBytes();
+    }
+
+    public  static DESUtil getInstance(String key){
+        return new DESUtil(key);
+    }
+
+    public  String encrypt(String data) throws Exception {
+        byte[] bt = encrypt(data.getBytes(),keybytes);
         String newStr = new BASE64Encoder().encode(bt);
         return newStr;
     }
 
 
-    public static void encrypt(File orgFile,File encryptFile) throws Exception{
+    public  void encrypt(File orgFile,File encryptFile) throws Exception{
         FileInputStream fis = new FileInputStream(orgFile);
         FileOutputStream fos = new FileOutputStream(encryptFile);
         Long fileLength = orgFile.length();
         byte[] buffer = new byte[fileLength.intValue()];
         fis.read(buffer);
-        fos.write(encrypt(buffer,PRIVATE_KEY.getBytes()));
+        fos.write(encrypt(buffer,keybytes));
         fis.close();
         fos.flush();
         fos.close();
     }
 
-    public static String decrypt(String data, String key) throws Exception {
+    public  String decrypt(String data) throws Exception {
         if (null == data) {
             return null;
         }
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] buf = decoder.decodeBuffer(data);
-        byte[] bt = decrypt(buf, key.getBytes());
+        byte[] bt = decrypt(buf,keybytes);
         return new String(bt);
     }
 
-    public static void decrypt(File encryptFile,File destFile) throws Exception{
+    public  void decrypt(File encryptFile,File destFile) throws Exception{
         FileInputStream fis = new FileInputStream(encryptFile);
         FileOutputStream fos = new FileOutputStream(destFile);
         Long fileLength = encryptFile.length();
         byte[] buffer = new byte[fileLength.intValue()];
         fis.read(buffer);
-        fos.write(decrypt(buffer,PRIVATE_KEY.getBytes()));
+        fos.write(decrypt(buffer,keybytes));
         fis.close();
         fos.flush();
         fos.close();
     }
 
-
-
-
-    private static byte[] decrypt(byte[] data, byte[] key) throws Exception {
+    private  byte[] decrypt(byte[] data, byte[] key) throws Exception {
         //生成一个随机数
         SecureRandom sr = new SecureRandom();
         //根据key创建DESKeySpec对象
@@ -77,14 +85,14 @@ public class DESUtil {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
         SecretKey secureKey = keyFactory.generateSecret(dks);
         //解密
-        Cipher cipher = Cipher.getInstance(DES);
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         //初始化
-        cipher.init(Cipher.DECRYPT_MODE, secureKey, sr);
+        cipher.init(Cipher.DECRYPT_MODE, secureKey,new IvParameterSpec(dks.getKey()),sr);
         return cipher.doFinal(data);
     }
 
 
-    private static byte[] encrypt(byte[] data, byte[] key) throws Exception {
+    private  byte[] encrypt(byte[] data, byte[] key) throws Exception {
         //生成一个随机数
         SecureRandom sr = new SecureRandom();
         //从key创建DESKeySpec对象
@@ -93,20 +101,20 @@ public class DESUtil {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
         SecretKey secureKey = keyFactory.generateSecret(dks);
         //实际完成加密操作
-        Cipher cipher = Cipher.getInstance(DES);
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         //初始化Cipher对象
-        cipher.init(Cipher.ENCRYPT_MODE, secureKey, sr);
+        cipher.init(Cipher.ENCRYPT_MODE, secureKey,new IvParameterSpec(dks.getKey()),sr);
         return cipher.doFinal(data);
     }
 
-
-    public static void main(String[] args)throws Exception {
-
+    public  static  void main(String[] args)throws Exception {
         File orgFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/0102.jpg");
         File desFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/aaaa");
         File xxxFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/xxx.jpg");
-        DESUtil.encrypt(orgFile,desFile);
-        DESUtil.decrypt(desFile,xxxFile);
+        DESUtil.getInstance("aaa").encrypt(orgFile,desFile);
+        DESUtil.getInstance("aaa").decrypt(desFile,xxxFile);
+
+        System.out.println(DESUtil.getInstance("").encrypt("asddsfsfddsaa"));
     }
 
 }

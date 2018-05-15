@@ -428,7 +428,7 @@ public class HttpClientUtil {
         String data = String.valueOf(resultMap.get("data"));
         String json;
         try {
-            json = DESUtil.decrypt(key,data);
+            json = DESUtil.getInstance(key).decrypt(data);
         } catch (Exception e) {
             logger.error(e, e);
             throw new RuntimeException(e);
@@ -451,7 +451,7 @@ public class HttpClientUtil {
         params.put("key", key);
         String data = JacksonUtil.nonDefaultMapper().toJson(paramsMap);
         try {
-            params.put("data", DESUtil.encrypt(key,data));
+            params.put("data", DESUtil.getInstance(key).encrypt(data));
         } catch (Exception e) {
             logger.error(e, e);
             throw new RuntimeException(e);
