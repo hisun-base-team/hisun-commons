@@ -76,11 +76,28 @@ public class DESUtil {
         fos.close();
     }
 
+
+
     private  byte[] decrypt(byte[] data, byte[] key) throws Exception {
         //生成一个随机数
         SecureRandom sr = new SecureRandom();
         //根据key创建DESKeySpec对象
         DESKeySpec dks = new DESKeySpec(key);
+        //创建密钥工厂
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
+        SecretKey secureKey = keyFactory.generateSecret(dks);
+        //解密
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        //初始化
+        cipher.init(Cipher.DECRYPT_MODE, secureKey,new IvParameterSpec(dks.getKey()),sr);
+        return cipher.doFinal(data);
+    }
+
+    public  byte[] getDecryptByte(byte[] data) throws Exception {
+        //生成一个随机数
+        SecureRandom sr = new SecureRandom();
+        //根据key创建DESKeySpec对象
+        DESKeySpec dks = new DESKeySpec(this.keybytes);
         //创建密钥工厂
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
         SecretKey secureKey = keyFactory.generateSecret(dks);
@@ -108,9 +125,9 @@ public class DESUtil {
     }
 
     public  static  void main(String[] args)throws Exception {
-        File orgFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/0102.jpg");
-        File desFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/aaaa");
-        File xxxFile = new File("/Users/zhouying/Downloads/0004/010.简历材料/xxx.jpg");
+        File orgFile = new File("D:/0102.jpg");
+        File desFile = new File("D:/aaaa");
+        File xxxFile = new File("D:/xxx.jpg");
         DESUtil.getInstance("aaa").encrypt(orgFile,desFile);
         DESUtil.getInstance("aaa").decrypt(desFile,xxxFile);
 
