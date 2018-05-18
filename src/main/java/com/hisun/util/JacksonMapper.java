@@ -1,17 +1,13 @@
+/*
+ * Copyright (c) 2018. Hunan Hisun Union Information Technology Co, Ltd. All rights reserved.
+ * http://www.hn-hisun.com
+ * 注意:本内容知识产权属于湖南海数互联信息技术有限公司所有,除非取得商业授权,否则不得用于商业目的.
+ */
+
 package com.hisun.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * 
- *<p>类名称：JacksonMapper</p>
- *<p>类描述: </p>
- *<p>公司：湖南海数互联信息技术有限公司</p>
- *@创建人：zhouying
- *@创建时间：2014-11-11 上午11:26:22
- *@创建人联系方式：zhouying@30wish.net
- *@version
- */
 public class JacksonMapper {
 
 	private static ObjectMapper mapper = new  ObjectMapper();
