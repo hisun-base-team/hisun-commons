@@ -31,30 +31,4 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
         }
     }
 
-    public static boolean isNotDate(String dateStr){
-        if(StringUtils.isNotEmpty(dateStr)) {
-            int lengh = dateStr.length();
-            if (lengh == 4 || lengh == 6 || lengh == 8) {
-                if (StringUtils.isNumeric(dateStr)) {
-                    if(lengh==6){
-                        int mouth = Integer.parseInt(dateStr.substring(3,5));
-                        if(mouth>=1&&mouth<=12){
-                            return false;
-                        }
-                        return true;
-                    }else if(lengh==8){
-                        int mouth = Integer.parseInt(dateStr.substring(3,5));
-                        int day = Integer.parseInt(dateStr.substring(5,7));
-                        if(mouth>=1&&mouth<=12&&day>=1&&day<=31){
-                            return false;
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
 }
