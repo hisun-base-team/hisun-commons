@@ -18,14 +18,6 @@
     <relativePath>../hisun-pom/pom.xml</relativePath>
   </parent>
 
-  <repositories>
-    <repository>
-      <id>AsposeJavaAPI</id>
-      <name>Aspose Java API</name>
-      <url>http://maven.aspose.com/artifactory/simple/ext-release-local/</url>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>com.belerweb</groupId>
@@ -119,6 +111,10 @@
     <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>sqljdbc4</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>oracle</groupId>
+      <artifactId>ojdbc14</artifactId>
     </dependency>
     <dependency>
       <groupId>net.coobird</groupId>

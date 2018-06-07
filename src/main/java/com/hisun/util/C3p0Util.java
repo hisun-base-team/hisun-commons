@@ -41,12 +41,30 @@ public class C3p0Util {
                 "&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true");
         dataSource.setUser(user);
         dataSource.setPassword(password);
-
         dataSource.setInitialPoolSize(10);  //初始化连接个数
         dataSource.setMaxPoolSize(40);   //最大链接数
         dataSource.setMinPoolSize(5);  //设置最小链接数
         dataSource.setAcquireIncrement(2);    //设置每次增加的连接数
         return dataSource;
     }
+
+
+    public static DataSource getOracleDataSource(String ip,
+                                                String port,
+                                                String sid,
+                                                String user,
+                                                String password) throws PropertyVetoException {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        dataSource.setDriverClass("oracle.jdbc.OracleDriver");
+        dataSource.setJdbcUrl("jdbc:oracle:thin:@"+ip+":"+port+":"+sid);
+        dataSource.setUser(user);
+        dataSource.setPassword(password);
+        dataSource.setInitialPoolSize(10);  //初始化连接个数
+        dataSource.setMaxPoolSize(40);   //最大链接数
+        dataSource.setMinPoolSize(5);  //设置最小链接数
+        dataSource.setAcquireIncrement(2);    //设置每次增加的连接数
+        return dataSource;
+    }
+
 
 }
