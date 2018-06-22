@@ -77,17 +77,64 @@ public class DESUtil {
         fos.close();
     }
 
-    public  void decrypt(File encryptFile,OutputStream os) throws Exception{
+//    public  void decrypt(File encryptFile,OutputStream os) throws Exception{
+//        FileInputStream fis = new FileInputStream(encryptFile);
+//        Long fileLength = encryptFile.length();
+//        byte[] buffer = new byte[fileLength.intValue()];
+//        fis.read(buffer);
+//        os.write(decrypt(buffer,keybytes));
+//        fis.close();
+//        os.flush();
+//        os.close();
+//    }
+
+    /**
+     *
+     * @param encryptFile 加密文件
+     * @param destFile 解密文件
+     * @param imgCode 右上角需要添加的编号 如果为空则不加编号
+     * @throws Exception
+     */
+    public  void decrypt(File encryptFile,File destFile,String imgCode,int x,int y) throws Exception{
+        FileInputStream fis = new FileInputStream(encryptFile);
+        FileOutputStream fos = new FileOutputStream(destFile);
+        Long fileLength = encryptFile.length();
+        byte[] buffer = new byte[fileLength.intValue()];
+        fis.read(buffer);
+        if(StringUtils.isNotEmpty(imgCode)){
+            byte[] datas = decrypt(buffer,keybytes);
+            fos.write(ImageDrawStringUtil.getInstance().drawStringStream(datas, imgCode,x,y));
+        }else {
+            fos.write(decrypt(buffer,keybytes));
+        }
+        fos.write(decrypt(buffer,keybytes));
+        fis.close();
+        fos.flush();
+        fos.close();
+    }
+
+    /**
+     *
+     * @param encryptFile 加密文件
+     * @param os 解密文件流
+     * @param imgCode 右上角需要添加的编号 如果为空则不加编号
+     * @throws Exception
+     */
+    public  void decrypt(File encryptFile,OutputStream os,String imgCode,int x,int y) throws Exception{
         FileInputStream fis = new FileInputStream(encryptFile);
         Long fileLength = encryptFile.length();
         byte[] buffer = new byte[fileLength.intValue()];
         fis.read(buffer);
-        os.write(decrypt(buffer,keybytes));
+        if(StringUtils.isNotEmpty(imgCode)){
+            byte[] datas = decrypt(buffer,keybytes);
+            os.write(ImageDrawStringUtil.getInstance().drawStringStream(datas, imgCode,x,y));
+        }else {
+            os.write(decrypt(buffer,keybytes));
+        }
         fis.close();
         os.flush();
         os.close();
     }
-
 
 
     private  byte[] decrypt(byte[] data, byte[] key) throws Exception {
