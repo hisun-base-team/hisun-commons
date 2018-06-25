@@ -42,7 +42,7 @@ public class ImageDrawStringUtil {
             int srcImgWidth = srcImg.getWidth(null);//获取图片的宽
             int srcImgHeight = srcImg.getHeight(null);//获取图片的高
 
-            int size = 20;
+            int size = 30;
             int s = srcImgWidth/600;
             if(s>1){
                 size=size*s;
@@ -69,7 +69,7 @@ public class ImageDrawStringUtil {
             // 输出图片
             FileOutputStream outImgStream = new FileOutputStream(file);
             ImageIO.write(bufImg, "jpg", outImgStream);
-            System.out.println("添加水印完成");
+            //System.out.println("添加水印完成");
 
             InputStream input = new FileInputStream(file);
 
